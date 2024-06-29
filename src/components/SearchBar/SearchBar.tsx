@@ -1,12 +1,15 @@
 import css from './SearchBar.module.css';
 import toast from 'react-hot-toast';
+import { FC, FormEvent } from 'react';
+import { SearchBarProps } from '../../types';
 
-export default function SearchBar({ onSubmit }) {
+const SearchBar: FC<SearchBarProps> = ({ onSubmit }) => {
 
-    const handleSubmit = (evt) => {
+    const handleSubmit = (evt: FormEvent<HTMLFormElement>):void => {
     evt.preventDefault();
-    const form = evt.target;
-    const topic = form.elements.topic.value;
+    const form = evt.target as HTMLFormElement;
+      const topicInput = form.elements.namedItem('topic') as HTMLInputElement;
+      const topic = topicInput.value;
         if (topic.trim() == "") {
             toast.error('You are searching empty value!')
             return;
@@ -31,4 +34,6 @@ export default function SearchBar({ onSubmit }) {
 </header>
 
   )
-}
+};
+
+export default SearchBar;

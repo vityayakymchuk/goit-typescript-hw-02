@@ -1,7 +1,8 @@
 import { Watch } from 'react-loader-spinner'
+import { FC } from 'react';
+import { LoaderProps } from '../../types';
 
-
-export default function Loader({isLoading}) {
+const Loader: FC<LoaderProps> = ({isLoading}) => {
   return (
     <Watch
   visible={isLoading}
@@ -18,6 +19,8 @@ export default function Loader({isLoading}) {
   }}
   />
   )
-}
+};
+
+export default Loader;
 
 

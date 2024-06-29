@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, FC } from 'react'
 import SearchBar from './components/SearchBar/SearchBar';
 import { makeGallery } from './FetchData';
 import { Toaster } from 'react-hot-toast';
@@ -7,23 +7,24 @@ import Loader from './components/Loader/Loader';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import ImageModal from './components/ImageModal/ImageModal';
+import { Image, ImageInfo } from './types';
 
 
-function App() {
-  const [searchValue, setSearchValue] = useState("");
-  const [images, setImages] = useState([]);
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [imageInfo, setImageInfo] = useState({ alt: "", url: "" });
+const App: FC =() => {
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [images, setImages] = useState<Image[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [imageInfo, setImageInfo] = useState<ImageInfo>({ alt: "", url: "" });
 
 
   useEffect(() => {
 if (searchValue.trim() === "") {
   return;
 }
-    async function fetchImages() {
+    const fetchImages = async ():Promise<void> => {
       try {
         
         setIsLoading(true);
@@ -31,7 +32,6 @@ if (searchValue.trim() === "") {
         const data = await makeGallery(searchValue, page);
         if(data.length === 0) {setIsError(true)}
         setImages((prevState) => [...prevState, ...data])
-        console.log(data)
       } catch (error) {
          setIsError(true);
       } finally {setIsLoading(false)}
@@ -39,23 +39,23 @@ if (searchValue.trim() === "") {
     fetchImages()
   }, [searchValue, page]);
  
- const handleSearch = async (topic) => {
+ const handleSearch = async (topic: string):Promise<void> => {
    setSearchValue(topic);
    setPage(1);
    setImages([]);
  };
   
-const handleLoadMore = async () => {
+const handleLoadMore = async ():Promise<void> => {
   setPage(page + 1);
   
 };
   
-  const openModal = (alt, url) => {
+  const openModal = (alt: string, url: string):void => {
     setIsOpen(true);
     setImageInfo({ alt, url });
   };
 
-  const closeModal = () => {
+  const closeModal = ():void => {
     setIsOpen(false);
     setImageInfo({ alt: "", url: "" });
   };
